@@ -3,10 +3,15 @@ import { Task, CreateTaskPayload, UpdateTaskPayload, RegisterUserPayload } from 
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
+  auth: {
+    username: "juca@gmail.com",
+    password: "123456"
+  },
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
 
 // Interceptador para adicionar token de autenticação se necessário
 api.interceptors.request.use((config) => {

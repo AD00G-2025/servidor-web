@@ -7,14 +7,12 @@ import { useAppSelector } from './store/hooks';
 import { Toaster } from '@/components/ui/sonner';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  console.log('Chegou no ProtectedRoute');
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   
   return isAuthenticated ? <>{children}</> : <Navigate to="/register" />;
 }
 
 function AppContent() {
-  console.log('Chegou no AppContent');
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   return (
@@ -42,7 +40,6 @@ function AppContent() {
 }
 
 function App() {
-  console.log('Chegou no App');
   return (
     <Provider store={store}>
       <AppContent />
