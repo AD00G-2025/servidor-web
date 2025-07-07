@@ -5,6 +5,7 @@ import { RegisterPage } from './pages/auth/RegisterPage';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
 import { useAppSelector } from './store/hooks';
 import { Toaster } from '@/components/ui/sonner';
+import { LoginPage } from './pages/auth/LoginPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
@@ -33,6 +34,12 @@ function AppContent() {
           } 
         />
         <Route path="/" element={<Navigate to="/register" />} />
+        <Route 
+          path="/login" 
+          element={
+            isAuthenticated ? <Navigate to="/dashboard" /> : <LoginPage />
+          } 
+        />
       </Routes>
       <Toaster />
     </Router>

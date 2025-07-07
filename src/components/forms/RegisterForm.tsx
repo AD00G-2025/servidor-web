@@ -28,14 +28,32 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     },
   });
 
-  const onSubmit = async (values: RegisterFormData) => {
-    try {
-      await dispatch(registerUser(values)).unwrap();
+const onSubmit = async (values: RegisterFormData) => {
+  try {
+    await dispatch(registerUser(values)).unwrap();
+
+    localStorage.setItem('email', values.email);
+    localStorage.setItem('senha', values.senha);
+
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/tarefas`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + btoa(`${values.email}:${values.senha}`)
+      }
+    });
+
+    if (response.ok) {
       onSuccess?.();
-    } catch (error) {
-      // Error is handled by Redux
+    } else {
+      throw new Error('Falha na autenticação após registro');
     }
-  };
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   return (
     <Card className="w-full shadow-xl border-0 bg-white/80 backdrop-blur-sm">

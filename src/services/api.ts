@@ -3,24 +3,59 @@ import { Task, CreateTaskPayload, UpdateTaskPayload, RegisterUserPayload } from 
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  auth: {
-    username: "juca@gmail.com",
-    password: "123456"
-  },
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
+api.interceptors.request.use((config) => {
+  const isRegisterRoute = config.url?.includes('/api/usuarios/registrar');
+
+  if (!isRegisterRoute) {
+    const email = localStorage.getItem('email');
+    const senha = localStorage.getItem('senha');
+
+    if (email && senha) {
+      config.auth = { username: email, password: senha };
+    }
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+
+  return config;
+});
+
+
 
 // Interceptador para adicionar token de autenticação se necessário
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  // Evita enviar auth e Authorization para a rota de registro
+  const isRegisterRoute = config.url?.includes('/api/usuarios/registrar');
+
+  if (!isRegisterRoute) {
+    // Adiciona header Authorization se houver token
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    // Adiciona auth básica se configurado
+    config.auth = {
+      username: "teste@teste.com",
+      password: "teste"
+    };
+  } else {
+    // Remove qualquer auth/acessos extras no registro
+    delete config.headers.Authorization;
+    delete config.auth;
   }
+
   return config;
 });
+
 
 export const taskService = {
   getTasks: async (): Promise<Task[]> => {

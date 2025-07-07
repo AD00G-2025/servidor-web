@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { RegisterForm } from '@/components/forms/RegisterForm';
 import { useAppSelector } from '@/store/hooks';
 import { useEffect } from 'react';
@@ -28,7 +28,7 @@ export function RegisterPage() {
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
           }}></div>
         </div>
-        
+
         <div className="relative z-10">
           <div className="mb-12">
             <h1 className="text-5xl font-bold text-white mb-4">TaskManager</h1>
@@ -104,6 +104,16 @@ export function RegisterPage() {
           </div>
 
           <RegisterForm onSuccess={handleSuccess} />
+
+          {/* Link para login */}
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Já tem uma conta?{' '}
+              <Link to="/login" className="text-blue-600 hover:underline">
+                Faça login
+              </Link>
+            </p>
+          </div>
 
           {/* Additional Info */}
           <div className="mt-8 text-center">
